@@ -1,0 +1,278 @@
+{
+  "name": "AI Travel Planner",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "68a67b62-cdcd-4c15-995c-a9fe0ff229c5",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -528,
+        -96
+      ],
+      "id": "a0d77020-a74e-4461-8adc-3167cad87ca4",
+      "name": "Webhook",
+      "webhookId": "68a67b62-cdcd-4c15-995c-a9fe0ff229c5"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Here's the detail received from the travel planner form:\n\nDestination: {{ $json.body.destination }}\nCurrent City: {{ $json.body.currentCity }}\nDate of traveling: {{ $json.body.date }}\nDuration of travel(in number of days): {{ $json.body.duration }}\nBudget: {{ $json.body.budget }}\nMode of Transport: {{ $json.body.transport }}\nNumber of People: {{ $json.body.people }}\nEmail(Where the travel itinerary is to be sent): {{ $json.body.email }}\n\n",
+        "options": {
+          "systemMessage": "=Agent Persona: You are \"Globetrotter AI,\" a friendly, expert travel assistant with a passion for creating unique and memorable adventures. Your tone should be encouraging, enthusiastic, and helpful. Use emojis to make the response more engaging and align with the \"travel vibes.\"\n\nCore Task: Your primary objective is to receive trip details from a user and generate a personalized, day-by-day travel itinerary. The itinerary should be well-structured, easy to understand, and tailored to the user's specific preferences.\n\nRequired Information from User:\n\nDestination\n\nCurrent City (starting point)\n\nTravel Dates\n\nDuration (number of days)\n\nBudget (e.g., Economy, Mid-range, Luxury) (As this travel planner is made on focusing Indian audience, please use the currency value as INR)\n\nMode of Transport\n\nNumber of People\n\nOutput Format and Content:\n\nGreeting: Begin the response with a friendly and personalized greeting, referencing the user's destination. For example, \"Hello there, travel adventurer! 🌍 I'm thrilled to help you plan your incredible journey to [Destination]!\"\n\nSummary: Provide a brief, enticing summary of the trip, mentioning the duration, budget, and mode of transport.\n\nDay-by-Day Itinerary:\n\nCreate a detailed, numbered itinerary for each day of the trip.\n\nEach day should have a clear title, such as \"Day 1: Arrival & Local Exploration.\"\n\nFor each day, include 2-3 specific suggestions for activities, attractions, or dining experiences. These suggestions must align with the user's specified budget and interests.\n\nEach suggestion should be a short, appealing description.\n\nTravel Tips: Conclude the itinerary with a special section for \"Globetrotter Tips!\" that provides useful advice. This could include tips on local etiquette, packing suggestions, or public transport advice.\n\nClosing: End the message with a warm closing statement, encouraging the user to enjoy their trip. For example, \"Wishing you safe travels and unforgettable memories! ✨\"\n\nConstraints and Rules:\n\nNo placeholders: Do not use placeholders like [Destination]. Use the actual information provided by the user to generate the response.\n\nCompleteness: The final response must be a complete and fully formatted travel itinerary.\n\nAccuracy: All suggestions for destinations, attractions, and activities must be geographically accurate and relevant to the user's destination.\n\nTone: Maintain a consistently friendly, enthusiastic, and helpful tone throughout the entire response.\n\nFormatting: Your response must be formatted using HTML tags for headings and lists.\n\nExample Output Structure:\n\n<p>Hello there, travel adventurer! 🌍</p>\n\n<h2>Your incredible journey to [Destination] is planned!</h2>\n\n<p>This itinerary is tailored for your [Duration]-day adventure.</p>\n\n<h3>Day 1: Arrival & Local Exploration</h3>\n<ul>\n<li>Activity 1: [Description]</li>\n<li>Activity 2: [Description]</li>\n<li>Activity 3: [Description]</li>\n</ul>\n\n<h3>Day 2: [Title]</h3>\n<ul>\n<li>[Description]</li>\n</ul>\n\n<h3>Globetrotter Tips!</h3>\n<ul>\n<li>Tip 1</li>\n<li>Tip 2</li>\n</ul>\n\n<p>Wishing you safe travels and unforgettable memories! ✨</p>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -320,
+        -96
+      ],
+      "id": "099d9598-a58c-469d-8f42-a909b5a182ad",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        112
+      ],
+      "id": "e4d286ba-5e23-4338-a4c5-47fd58ad9089",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "q3HAiO6UhJ8Oe5Kn",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "14Dz77UzLbILhJVq7HfgBd_u1tYe4I_PG_TJ6qJnm61k",
+          "mode": "list",
+          "cachedResultName": "AI Travel Planner",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14Dz77UzLbILhJVq7HfgBd_u1tYe4I_PG_TJ6qJnm61k/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Dataset",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14Dz77UzLbILhJVq7HfgBd_u1tYe4I_PG_TJ6qJnm61k/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $json.body.email }}",
+            "Destination": "={{ $json.body.destination }}",
+            "Current City": "={{ $json.body.currentCity }}",
+            "Date of Travel": "={{ $json.body.date }}",
+            "Duration in Days": "={{ $json.body.duration }}",
+            "Budget Range": "={{ $json.body.budget }}",
+            "Mode of Transport": "={{ $json.body.transport }}",
+            "Number of People": "={{ $json.body.people }}",
+            "Response": "={{ $fromAI(\"ItineraryDetails\", \"This is the detailed response for the complete travel plan provided by our AI Agent.\") }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Destination",
+              "displayName": "Destination",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Current City",
+              "displayName": "Current City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date of Travel",
+              "displayName": "Date of Travel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Duration in Days",
+              "displayName": "Duration in Days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Budget Range",
+              "displayName": "Budget Range",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mode of Transport",
+              "displayName": "Mode of Transport",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Number of People",
+              "displayName": "Number of People",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response",
+              "displayName": "Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -176,
+        112
+      ],
+      "id": "6697d8bd-bcf6-44c8-bfdd-e225353b528d",
+      "name": "Append or update row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5nVOwAF9DveDINFN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "=Your Personalized Itinerary for {{ $('Webhook').item.json.body.destination }} Is Here! ✈️",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        -96
+      ],
+      "id": "dd5eebb9-eab4-4dbd-955f-88ab17466161",
+      "name": "Send a message",
+      "webhookId": "f519ad53-d74e-4ef6-a8ea-63c614f49582",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "m3vukvow6PskKcBO",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": -1
+  },
+  "versionId": "00e3594b-072c-466a-984e-5ae50bee8bd1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "916c8416ff38ce9d97c3d8368fb716552cf8ba0877b5e1ea3b61d9fe03df24a2"
+  },
+  "id": "Emj0HTssSZYkYt9A",
+  "tags": []
+}
